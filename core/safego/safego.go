@@ -3,10 +3,10 @@
 package safego
 
 import (
+	"context"
 	"fmt"
 	"runtime/debug"
-
-	"go.uber.org/zap"
+	"sfgo/core/log"
 )
 
 // 用此函数启动goroutine。
@@ -18,7 +18,7 @@ func Go(f func()) {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				zap.L().Error(fmt.Sprintf("Panic recovered: %s, stack: %s", r, string(debug.Stack())))
+				log.Error(context.TODO(), fmt.Sprintf("Panic recovered: %s, stack: %s", r, string(debug.Stack())))
 			}
 		}()
 
@@ -31,7 +31,7 @@ func GoArgs(f func(...interface{}), args ...interface{}) {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				zap.L().Error(fmt.Sprintf("Panic recovered: %s, stack: %s", r, string(debug.Stack())))
+				log.Error(context.TODO(), fmt.Sprintf("Panic recovered: %s, stack: %s", r, string(debug.Stack())))
 			}
 		}()
 
