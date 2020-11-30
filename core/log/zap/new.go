@@ -13,7 +13,7 @@ package zap
 import (
 	"fmt"
 	"github.com/jsternberg/zap-logfmt"
-	"go.uber.org/zap"
+	zapLog "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	stdlog "log"
@@ -26,7 +26,7 @@ import (
 
 var (
 	_LOGHOSTNAME = ""
-	_AtomicLevel zap.AtomicLevel
+	_AtomicLevel zapLog.AtomicLevel
 )
 
 // TODO log by date
@@ -37,7 +37,7 @@ func New() *zapLogger {
 	_LOGHOSTNAME, _ = os.Hostname()
 
 	// 设置时间戳格式
-	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig := zapLog.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = func(ts time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 		ts = ts.Local()
 		if !base.LogConfigure.LocalTime {
@@ -67,7 +67,7 @@ func New() *zapLogger {
 	default:
 		if base.LogConfigure.MaxSize == 0 && base.LogConfigure.MaxBackups == 0 && base.LogConfigure.MaxAge == 0 {
 			// 未启动日志切换
-			ws, _, err := zap.Open(base.LogConfigure.Output)
+			ws, _, err := zapLog.Open(base.LogConfigure.Output)
 			if err != nil {
 				stdlog.Fatalf("Failed open log file: %s", base.LogConfigure.Output)
 				return nil
@@ -88,7 +88,7 @@ func New() *zapLogger {
 	}
 
 	// info level
-	atomicLevel := zap.NewAtomicLevel()
+	atomicLevel := zapLog.NewAtomicLevel()
 	_AtomicLevel = atomicLevel
 
 	// 使用 zapcore
@@ -99,7 +99,7 @@ func New() *zapLogger {
 	)
 
 	// 生成logger
-	logger := zap.New(core)
+	logger := zapLog.New(core)
 
 	//显 caller
 	//logger = logger.WithOptions(zap.AddCaller())
@@ -108,29 +108,29 @@ func New() *zapLogger {
 	//logger = logger.WithOptions(zap.AddStacktrace(zap.ErrorLevel))
 
 	// 初始化fields
-	fs := make([]zap.Field, 0)
-	fs = append(fs, zap.String("hostname", _LOGHOSTNAME))
-	logger = logger.WithOptions(zap.Fields(fs...))
+	fs := make([]zapLog.Field, 0)
+	fs = append(fs, zapLog.String("hostname", _LOGHOSTNAME))
+	logger = logger.WithOptions(zapLog.Fields(fs...))
 
 	// 设置level
 	switch base.LogConfigure.Level {
 	case "debug":
-		atomicLevel.SetLevel(zap.DebugLevel)
+		atomicLevel.SetLevel(zapLog.DebugLevel)
 	case "info":
-		atomicLevel.SetLevel(zap.InfoLevel)
+		atomicLevel.SetLevel(zapLog.InfoLevel)
 	case "warning", "warn":
-		atomicLevel.SetLevel(zap.WarnLevel)
+		atomicLevel.SetLevel(zapLog.WarnLevel)
 	case "error":
-		atomicLevel.SetLevel(zap.ErrorLevel)
+		atomicLevel.SetLevel(zapLog.ErrorLevel)
 	case "fatal":
-		atomicLevel.SetLevel(zap.FatalLevel)
+		atomicLevel.SetLevel(zapLog.FatalLevel)
 	case "panic":
-		atomicLevel.SetLevel(zap.PanicLevel)
+		atomicLevel.SetLevel(zapLog.PanicLevel)
 	default:
-		atomicLevel.SetLevel(zap.InfoLevel)
+		atomicLevel.SetLevel(zapLog.InfoLevel)
 	}
 
-	zap.ReplaceGlobals(logger)
+	zapLog.ReplaceGlobals(logger)
 
 	// 动态调整level服务
 	if base.LevelServer.Enabled {

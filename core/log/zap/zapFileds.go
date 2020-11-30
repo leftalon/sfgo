@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sfgo/core/log/base"
 
-	"go.uber.org/zap"
+	zapLog "go.uber.org/zap"
 )
 
 // 处理带fields的日志
 type zapFields struct {
-	fields []zap.Field
+	fields []zapLog.Field
 }
 
 func (s *zapFields) ImpleLogger() {}
@@ -42,11 +42,11 @@ func (s *zapFields) Panic(ctx context.Context, format string, args ...interface{
 // 支持链式调用
 func (s *zapFields) WithFields(mapFields map[string]interface{}) base.ILogger {
 	if s.fields == nil {
-		s.fields = make([]zap.Field, 0, len(mapFields))
+		s.fields = make([]zapLog.Field, 0, len(mapFields))
 	}
 
 	for key, val := range mapFields {
-		s.fields = append(s.fields, zap.Any(key, val))
+		s.fields = append(s.fields, zapLog.Any(key, val))
 	}
 
 	return s

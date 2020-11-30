@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sfgo/core/log/base"
 
-	"go.uber.org/zap"
+	zapLog "go.uber.org/zap"
 )
 
 type zapLogger struct{}
@@ -44,9 +44,9 @@ func (s *zapLogger) Panic(ctx context.Context, format string, args ...interface{
 
 // 指定fields
 func (s *zapLogger) WithFields(mapFields map[string]interface{}) base.ILogger {
-	fields := make([]zap.Field, 0, len(mapFields))
+	fields := make([]zapLog.Field, 0, len(mapFields))
 	for key, val := range mapFields {
-		fields = append(fields, zap.Any(key, val))
+		fields = append(fields, zapLog.Any(key, val))
 	}
 
 	return &zapFields{fields}
@@ -56,6 +56,7 @@ func (s *zapLogger) GetLevel() string {
 	return _AtomicLevel.Level().String()
 }
 
-func GetLogger() *zap.Logger {
-	return zap.L()
+func GetLogger() *zapLog.Logger {
+
+	return zapLog.L()
 }
