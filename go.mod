@@ -20,12 +20,12 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1
+	github.com/tealeg/xlsx v1.0.5
 	go.uber.org/zap v1.16.0
 	golang.org/x/lint v0.0.0-20200130185559-910be7a94367 // indirect
 	golang.org/x/net v0.0.0-20201024042810-be3efd7ff127 // indirect
 	golang.org/x/tools v0.0.0-20200428211428-0c9eba77bc32 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
