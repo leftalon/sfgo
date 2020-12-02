@@ -1,5 +1,7 @@
 package httpclient
 
+import "context"
+
 type Options struct {
 	timeout int
 	params  map[string]string
@@ -36,4 +38,20 @@ func WithHeaders(headers map[string]string) Option {
 			s.headers[key] = val
 		}
 	}
+}
+
+func optionHandle(ctx context.Context, opts ...Option) (*Options, error) {
+	if ctx == nil {
+		ctx = context.TODO()
+	}
+	// 默认超时时间为30秒
+	options := &Options{
+		timeout: 30,
+	}
+
+	for _, opt := range opts {
+		opt(options)
+	}
+
+	return options, nil
 }
